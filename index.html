@@ -3,45 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DV Ma'lumot yuborish</title>
+  <title>DV Dasturi Ma’lumotlari</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     body {
       font-family: sans-serif;
-      background-color: #f9fafb;
+      background: #f8f9fa;
       text-align: center;
-      padding: 30px;
+      padding: 20px;
+    }
+    h2 {
+      color: #0078d7;
     }
     input {
-      display: block;
-      margin: 10px auto;
-      padding: 10px;
       width: 80%;
+      padding: 10px;
+      margin: 10px 0;
       border-radius: 8px;
       border: 1px solid #ccc;
     }
     button {
       background-color: #0088cc;
       color: white;
+      padding: 12px 20px;
       border: none;
       border-radius: 8px;
-      padding: 10px 20px;
-      font-size: 16px;
       cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #0078d7;
     }
   </style>
 </head>
 <body>
-  <h2>DV dasturi uchun ma'lumot kiriting</h2>
-
-  <input type="text" id="fullname" placeholder="Ism Familiya">
-  <input type="date" id="birthdate">
-  <input type="text" id="passport" placeholder="Pasport raqami">
-
+  <h2>DV dasturi uchun ma’lumot kiriting</h2>
+  <input type="text" id="fullname" placeholder="Ism Familiya" />
+  <input type="date" id="birthdate" />
+  <input type="text" id="passport" placeholder="Pasport raqami" />
   <button id="send">Yuborish</button>
 
   <script>
     const tg = window.Telegram.WebApp;
+    tg.expand();
 
     document.getElementById("send").addEventListener("click", () => {
       const fullname = document.getElementById("fullname").value;
@@ -53,14 +57,10 @@
         return;
       }
 
-      // Ma'lumotlarni JSON shaklida yuborish
       const data = { fullname, birthdate, passport };
-      tg.sendData(JSON.stringify(data)); // 🔥 Bu joy Telegram botga ma'lumot yuboradi
-
+      tg.sendData(JSON.stringify(data)); // 🔥 Botga yuboradi
       tg.close(); // Ilovani yopadi
     });
-
-    tg.expand(); // Mini appni to‘liq ekran qiladi
   </script>
 </body>
 </html>
