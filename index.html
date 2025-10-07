@@ -2,64 +2,99 @@
 <html lang="uz">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DV Dasturi Ma’lumotlari</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DV Application Mini App</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     body {
-      font-family: sans-serif;
-      background: #f8f9fa;
-      text-align: center;
+      font-family: Arial, sans-serif;
+      background-color: var(--tg-theme-bg-color);
+      color: var(--tg-theme-text-color);
       padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
+
     h2 {
-      color: #0078d7;
+      text-align: center;
+      margin-bottom: 20px;
     }
-    input {
-      width: 80%;
+
+    form {
+      width: 100%;
+      max-width: 350px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    input, button {
       padding: 10px;
-      margin: 10px 0;
       border-radius: 8px;
       border: 1px solid #ccc;
-    }
-    button {
-      background-color: #0088cc;
-      color: white;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
       font-size: 16px;
     }
-    button:hover {
-      background-color: #0078d7;
+
+    button {
+      background-color: var(--tg-theme-button-color);
+      color: var(--tg-theme-button-text-color);
+      cursor: pointer;
+    }
+
+    img {
+      width: 100%;
+      border-radius: 10px;
+      margin-top: 10px;
+      display: none;
     }
   </style>
 </head>
 <body>
-  <h2>DV dasturi uchun ma’lumot kiriting</h2>
-  <input type="text" id="fullname" placeholder="Ism Familiya" />
-  <input type="date" id="birthdate" />
-  <input type="text" id="passport" placeholder="Pasport raqami" />
-  <button id="send">Yuborish</button>
+  <h2>DV Application Form</h2>
+  <form id="dvForm">
+    <input type="text" id="first_name" placeholder="Ism" required />
+    <input type="text" id="last_name" placeholder="Familiya" required />
+    <label for="birthdate">Tug‘ilgan sanangizni kiriting:</label>
+    <input type="date" id="birthdate" required />
+    <label for="photo">Rasm yuklang (JPG/PNG)</label>
+    <input type="file" id="photo" accept="image/*" required />
+    <img id="preview" alt="Yuklangan rasm" />
+    <button type="submit">Yuborish</button>
+  </form>
 
   <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
 
-    document.getElementById("send").addEventListener("click", () => {
-      const fullname = document.getElementById("fullname").value;
-      const birthdate = document.getElementById("birthdate").value;
-      const passport = document.getElementById("passport").value;
+    const form = document.getElementById("dvForm");
+    const photoInput = document.getElementById("photo");
+    const preview = document.getElementById("preview");
 
-      if (!fullname || !birthdate || !passport) {
-        alert("Iltimos, barcha maydonlarni to‘ldiring!");
-        return;
-      }
+    let photoBase64 = "";
 
-      const data = { fullname, birthdate, passport };
-      tg.sendData(JSON.stringify(data)); // 🔥 Botga yuboradi
-      tg.close(); // Ilovani yopadi
+    photoInput.addEventListener("change", () => {
+      const file = photoInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        photoBase64 = reader.result;
+        preview.src = photoBase64;
+        preview.style.display = "block";
+      };
+      reader.readAsDataURL(file);
+    });
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const data = {
+        first_name: document.getElementById("first_name").value,
+        last_name: document.getElementById("last_name").value,
+        birthdate: document.getElementById("birthdate").value,
+        photo: photoBase64
+      };
+      tg.sendData(JSON.stringify(data)); // ma'lumotni botga yuboradi
+      tg.close();
     });
   </script>
 </body>
