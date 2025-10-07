@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Telegram Mini App</title>
+
+    <!-- Telegram WebApp API -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        button {
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-theme-button-text-color);
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>Salom, <span id="user"></span>!</h2>
+    <p>Bu sizning Telegram mini ilovangiz.</p>
+    <button onclick="sendData()">Ma’lumot yuborish</button>
+
+    <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand(); // Ilovani to‘liq ekran qilish
+
+    const userName = tg.initDataUnsafe?.user?.first_name || "Foydalanuvchi";
+    document.getElementById("user").innerText = userName;
+
+    function sendData() {
+      tg.sendData(JSON.stringify({ message: "Foydalanuvchi tugmani bosdi!" }));
+      tg.close(); // ixtiyoriy: mini appni yopish
+    }
+    </script>
+</body>
+</html>
